@@ -49,14 +49,39 @@ jobs:
           tags: swanpoi/person-service:latest
           context: .
       
+  deploy:
+    name: Deploy
+    needs: [ unit-test, build ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update docker-compose
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          port: ${{ secrets.REMOTE_PORT }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          source: docker-compose-prod.yml
+          target: /opt/rsoi/
       
+      - name: Deploy to host
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          port: ${{ secrets.REMOTE_PORT }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker compose -f /opt/rsoi/docker-compose-prod.yml pull
+            docker compose -f /opt/rsoi/docker-compose-prod.yml up -d
 
-  # deploy:
-  #   name: Deploy
-  #   needs: [ unit-test, build ]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Deploy on 
+      - name: Health check of server
+        uses: jtalk/url-health-check-action@v3.2
+        with:
+          url: http://${{ secrets.REMOTE_IP }}:3000/api/v1/persons
+          max-attempts: 30
+          retry-delay: 5s
 
 
   # build:
