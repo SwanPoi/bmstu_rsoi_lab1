@@ -14,7 +14,7 @@ services:
     ports:
       - "5432:5432"
   person-server:
-    build: .
+    build: ./Dockerfile.local
     container_name: person-server
     ports:
       - "3000:3000"
