@@ -61,7 +61,7 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
-          source: docker-compose-prod.yml
+          source: docker-compose.yml
           target: /opt/rsoi/
       
       - name: Deploy to host
@@ -73,8 +73,8 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker compose -f /opt/rsoi/docker-compose-prod.yml pull
-            docker compose -f /opt/rsoi/docker-compose-prod.yml up -d
+            docker compose -f /opt/rsoi/docker-compose.yml pull
+            docker compose -f /opt/rsoi/docker-compose.yml up -d
 
       - name: Health check of server
         uses: jtalk/url-health-check-action@v3.2
