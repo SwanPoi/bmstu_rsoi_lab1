@@ -19,6 +19,9 @@ func SetupRoutes(routes *gin.Engine, db *gorm.DB, logger *logger.Logger) {
 	{
 		persons := api.Group("/persons")
 		persons.GET("", personsHandler.GetPersons)
+		persons.GET("/:id", personsHandler.GetPersonById)
 		persons.POST("", personsHandler.AddPerson)
+		persons.DELETE("/:id", personsHandler.DeletePerson)
+		persons.PATCH("/:id", personsHandler.UpdatePerson)
 	}
 }
