@@ -53,8 +53,8 @@ jobs:
           file: ./Dockerfile.prod
           push: true
           tags: | 
-            ghcr.io/${{ github.repository }}/bmstu_rsoi_lab1_server:latest
-            ghcr.io/${{ github.repository }}/bmstu_rsoi_lab1_server:${{ github.sha }}
+            ghcr.io/${{ lower(github.repository) }}/bmstu_rsoi_lab1_server:latest
+            ghcr.io/${{ lower(github.repository) }}/bmstu_rsoi_lab1_server:${{ github.sha }}
 
   # deploy:
   #   name: Deploy
