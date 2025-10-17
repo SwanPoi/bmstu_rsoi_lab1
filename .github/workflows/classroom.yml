@@ -22,7 +22,7 @@ jobs:
       - name: Verify dependencies
         run: |
           go mod download
-          go mod Verify
+          go mod verify
       
       - name: Build
         run: go build -v -o bin/bmstu_rsoi_lab1 .
