@@ -30,7 +30,7 @@ jobs:
 
   build:
     name: Build Binary
-    needs: test
+    needs: unit-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -58,7 +58,7 @@ jobs:
 
   # deploy:
   #   name: Deploy
-  #   needs: [ test, build ]
+  #   needs: [ unit-test, build ]
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Deploy on 
