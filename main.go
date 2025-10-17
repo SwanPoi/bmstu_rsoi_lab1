@@ -41,16 +41,23 @@ func main() {
 
 	l := logger.New(c.Logger.Level, loggerFile)
 
-	connString := db.GetConnectionString(&c.Database)
-	fmt.Println("server url: ", connString)
+	connString := os.Getenv("DATABASE_URL")
+
+	if connString == "" {
+		connString = db.GetConnectionString(&c.Database)
+	}
+
 	dbHandler := db.Init(connString, l)
 	router := gin.Default()
 
-	serverUrl := fmt.Sprintf(":%d",
-		c.HTTP.Port,
-	)
+	port := os.Getenv("PORT")
 
-	fmt.Println("server url: ", serverUrl)
+	if port == "" {
+		port = fmt.Sprintf("%d", c.HTTP.Port)
+	}
+
+	serverUrl := fmt.Sprintf(":%s", port)
+
 	controller.SetupRoutes(router, dbHandler, l)
 	router.Run(serverUrl)
 }
